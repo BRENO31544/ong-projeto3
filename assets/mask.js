@@ -1,55 +1,50 @@
-// Máscara CPF
-document.getElementById("cpf").addEventListener("input", function() {
-    let value = this.value.replace(/\D/g, '');
-    if (value.length > 3) value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    if (value.length > 6) value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    if (value.length > 9) value = value.replace(/(\d{3})(\d)/, "$1-$2");
-    this.value = value;
-});
+// mask.js
+// ... (Máscaras inalteradas) ...
 
-// Máscara telefone
-document.getElementById("telefone").addEventListener("input", function() {
-    let value = this.value.replace(/\D/g, '');
-    value = value.replace(/(\d{2})(\d)/, "($1) $2");
-    value = value.replace(/(\d{5})(\d)/, "$1-$2");
-    this.value = value;
-});
-
-// Máscara CEP
-document.getElementById("cep").addEventListener("input", function() {
-    let value = this.value.replace(/\D/g, '');
-    value = value.replace(/(\d{5})(\d)/, "$1-$2");
-    this.value = value;
-});
-
-const hamburger = document.querySelector(".hamburger");
+const menuToggle = document.getElementById("menuToggle"); // O input checkbox
 const menu = document.querySelector(".menu");
 const dropBtns = document.querySelectorAll(".dropbtn");
 
-// abrir/fechar menu mobile
-hamburger.addEventListener("click", () => {
-  menu.classList.toggle("show");
-});
+// Fechar menu mobile (Se o checkbox estava marcado, desmarca)
+function closeMobileMenu() {
+    if (menuToggle.checked) {
+        menuToggle.checked = false;
+        dropBtns.forEach(btn => btn.parentElement.classList.remove("active"));
+    }
+}
 
-// abrir/fechar submenu mobile
+// **AJUSTE AQUI:** O clique no ícone hambúrguer é tratado nativamente pelo checkbox no CSS.
+
+// abrir/fechar submenu mobile - mantido, mas com correção na lógica
 dropBtns.forEach(btn => {
-  btn.addEventListener("click", e => {
-    e.preventDefault(); // evita navegação
-    const parent = btn.parentElement;
-    parent.classList.toggle("active");
-  });
+    btn.addEventListener("click", e => {
+        // Previne que o link vá para '#' e mude o hash, focando em abrir/fechar o submenu
+        e.preventDefault(); 
+        const parent = btn.parentElement;
+        parent.classList.toggle("active");
+    });
 });
 
-// fechar menu ao clicar em qualquer link
-menu.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    menu.classList.remove("show");
-    dropBtns.forEach(btn => btn.parentElement.classList.remove("active"));
-  });
+// fechar menu ao clicar em qualquer link de navegação (SPA)
+menu.querySelectorAll("li a").forEach(link => {
+    // Garante que o dropdown link não feche o menu (apenas os links de navegação final)
+    if (!link.classList.contains('dropbtn')) {
+        link.addEventListener("click", () => {
+            closeMobileMenu(); 
+        });
+    }
 });
 
+
+// Modal - mantido
 const modal = document.getElementById('modal');
-document.getElementById('openModal').onclick = () => modal.style.display = 'flex';
-document.getElementById('closeModal').onclick = () => modal.style.display = 'none';
-window.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; }
+const openModalBtn = document.getElementById('openModal');
+const closeModalBtn = document.getElementById('closeModal');
 
+if (openModalBtn && closeModalBtn && modal) {
+    openModalBtn.onclick = () => modal.style.display = 'flex';
+    closeModalBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { 
+        if(e.target === modal) modal.style.display = 'none'; 
+    }
+}

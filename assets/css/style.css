@@ -490,3 +490,58 @@ footer a{
   cursor: pointer;
 }
 
+/* --- SPA: Controle de Seções --- */
+main section {
+    /* MANTENHA as transições visuais */
+    opacity: 0;
+    transform: translateY(15px);
+    transition: 
+        opacity 0.3s ease, 
+        transform 0.3s ease,
+        /* Adicione a transição de altura e margem para o efeito de "sumir" */
+        margin 0.3s ease,
+        height 0s 0.3s; /* Altura 0s após 0.3s para esconder sem sumir imediatamente */
+
+    /* OCULTAR: Ocupa 0 espaço e esconde o conteúdo (o que impede a rolagem) */
+    height: 0;
+    overflow: hidden; 
+    padding: 0; /* Remove padding para um melhor "esmagamento" */
+    margin: 0;  /* Remove margem para um melhor "esmagamento" */
+}
+
+main section.active {
+    /* REVELAR */
+    opacity: 1;
+    transform: translateY(0);
+    height: auto; /* Permite que o conteúdo defina a altura, forçando a rolagem do <body> */
+    overflow: visible;
+    
+    /* RECOLOQUE os paddings e margins originais da section */
+    padding: 15px; 
+    margin: 15px auto;
+}
+
+/* IMPORTANTE: Remova a linha 'display: block;' da classe .active se você a tinha, 
+   pois 'height: auto;' fará a exibição corretamente. 
+   O código atual: */
+
+/* main section.active {
+    display: block; <--- REMOVA SE VOCÊ AINDA ESTIVER USANDO ISTO
+    opacity: 1;
+    transform: translateY(0);
+} */
+
+/* Destaque do link ativo no menu */
+.menu a.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-neutral-100);
+  color: var(--color-neutral-100);
+}
+
+/* Suaviza quando a página troca no mobile */
+@media (max-width: 768px) {
+  main section {
+    transition: opacity 0.3s ease;
+  }
+}
+
